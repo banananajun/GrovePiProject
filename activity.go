@@ -2,8 +2,6 @@
 package grovepiDigitalRead
 
 import (
-
-
 	"sync"
 	"time"
 
