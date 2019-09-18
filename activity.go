@@ -163,7 +163,7 @@ func (grovePi GrovePi) PinMode(pin byte, mode string) error {
 	if err != nil {
 		log.Error("GrovePi :: i2cDevice.Read Error", err)
 
-		Return 0, err
+		return 0, err
 	}
 
 
