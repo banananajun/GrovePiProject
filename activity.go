@@ -11,43 +11,7 @@ import (
 )
 
 // log is the default package logger
-var log = logger.GetLogger("activity-tibco-GrovePi")
-
-
-
-const (
-
-	ivPin     = "pin" 
-	ovResult = "result"
-	
-	
-	//Cmd format
-	DIGITAL_READ = 1
-	PIN_MODE      = 5
-)
-
-
-
-type GrovePi struct {
-	
-	i2cmodule hwio.I2CModule
-	i2cDevice hwio.I2CDevice
-}
-
-
-
-// Activity is a Activity implementation
-type grovePiDRActivity struct {
-	sync.Mutex
-	metadata *activity.Metadata
-}
-
-
-
-// NewActivity creates a new Activity
-func NewActivity(metadata *activity.Metadata) activity.Activity {
-	return &grovePiDRActivity{metadata: metadata}
-}
+var log = logge }
 
 
 
@@ -73,21 +37,12 @@ func (a *grovePiDRActivity) Eval(context activity.Context) (done bool, err error
 	var g *GrovePi
 	g = InitGrovePi(0x04)
 	// added ":" to define result
+	
 	result, err := g.DigitalRead(pin)
-//g.PinMode(pin, "input")
+
 	if err != nil {
 		log.Error("GrovePi :: DigitalRead issue ", err)
 	}
-
-	//read to GrovePi
-	// if value {
-	//	g.DigitalRead(pin, 1)
-//	} else {
-//		g.DigitalRead(pin, 0) 
-//	}
-
-
-
 	
 	if result {
 	context.SetOutput(ovResult, true)
