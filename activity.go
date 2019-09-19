@@ -11,7 +11,7 @@ import (
 )
 
 // log is the default package logger
-var log = logge }
+var log = logger.GetLogger("activity-tibco-GrovePi")
 
 
 
