@@ -55,6 +55,6 @@ func TestGrovePiDR(t *testing.T) {
 	act.Eval(tc)
 
 	result := tc.GetOutput(ovResult).(bool)
-assert.NotNil(t, result)
+	assert.NotNil(t, result)
 	fmt.Printf("Result: %t ", result)
 }
