@@ -1,12 +1,18 @@
 package grovepiDigitalRead
 
 import (
+	"fmt"
 	"testing"
 
 	"io/ioutil"
 
 	"github.com/TIBCOSoftware/flogo-contrib/action/flow/test"
 	"github.com/TIBCOSoftware/flogo-lib/core/activity"
+	"github.com/stretchr/testify/assert"
+	
+	"github.com/project-flogo/core/activity"
+	"github.com/project-flogo/core/support/test"
+	
 )
 
 var activityMetadata *activity.Metadata
