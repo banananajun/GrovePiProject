@@ -15,8 +15,8 @@
   ],
   "outputs": [
     {
-      "name": "temperature",
-      "type": "string"
+      "name": "result",
+      "type": "boolean"
     }
   ]
 }
