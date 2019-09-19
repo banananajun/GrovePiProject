@@ -11,7 +11,7 @@ import (
 	"github.com/stretchr/testify/assert"
 	
 	"github.com/project-flogo/core/activity"
-	"github.com/project-flogo/core/support/test"
+	
 	
 )
 
