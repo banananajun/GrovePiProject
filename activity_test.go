@@ -1,17 +1,16 @@
 package grovepiDigitalRead
 
 import (
-	"fmt"
 	"testing"
+	"fmt"
+	
+	"github.com/stretchr/testify/assert"
 
 	"io/ioutil"
 
 	"github.com/TIBCOSoftware/flogo-contrib/action/flow/test"
 	"github.com/TIBCOSoftware/flogo-lib/core/activity"
-	"github.com/stretchr/testify/assert"
-	
-	"github.com/project-flogo/core/activity"
-	
+
 	
 )
 
