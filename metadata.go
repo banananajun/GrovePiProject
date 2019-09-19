@@ -1,8 +1,11 @@
-package sample
+package grovepiDigitalRead
 
 import "github.com/project-flogo/core/data/coerce"
 
 type Settings struct {
+	const ivPin = "pin"
+	const ovResult = "result"
+	
 	ASetting string `md:"aSetting,required"`
 }
 
