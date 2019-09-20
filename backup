@@ -4,7 +4,7 @@ import (
 	"sync"
 	"time"
 
-	"strconv"
+	"unsafe"
 	"github.com/TIBCOSoftware/flogo-lib/core/activity"
 	"github.com/TIBCOSoftware/flogo-lib/logger"
 	"github.com/mrmorphic/hwio"
@@ -128,13 +128,16 @@ func (grovePi GrovePi) CloseDevice() {
 //}
 // val --> value
 func (grovePi *GrovePi) DigitalRead(pin byte, mode string) (bool,error) {
-	b := []byte{DIGITAL_READ, pin, 1, 0}
+	// b := []byte{DIGITAL_READ, pin, 1, 0}
 	rawdata, err := grovePi.PinMode(pin, mode)
 	if err != nil {
 		return false, err
 	}
-	data := strconv.Atoi(string(rawdata))
-	boolResult := !(data == 0)
+	data := rawdata[1:5]
+
+	dataInt := int32(data[0]) | int32(data[1])<<8 | int32(data[2])<<16 | int32(data[3])<<24
+	d := (*(*int32)(unsafe.Pointer(&dataInt)))
+	boolResult := !(d == 0)
 	time.Sleep(100 * time.Millisecond)
 	return boolResult, nil
 }
