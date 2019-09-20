@@ -1,5 +1,9 @@
 package grovepiDigitalRead
 
+// ./activity.go:157:2: non-bool result (type []byte) used as if condition
+// FAIL	_/home/jun/core/examples/activity [build failed]
+
+
 import (
 	"sync"
 	"time"
