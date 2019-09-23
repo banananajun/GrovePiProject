@@ -4,7 +4,7 @@ import (
 	"sync"
 	"time"
 
-
+	"unsafe"
 	"github.com/TIBCOSoftware/flogo-lib/core/activity"
 	"github.com/TIBCOSoftware/flogo-lib/logger"
 	"github.com/mrmorphic/hwio"
@@ -15,11 +15,40 @@ var log = logger.GetLogger("activity-tibco-GrovePi")
 
 
 
+const (
+
+	ivPin     = "pin" 
+	ovResult = "result"
+	
+	
+	//Cmd format
+	DIGITAL_READ = 1
+	PIN_MODE      = 5
+)
+
+
+
+type GrovePi struct {
+	
+	i2cmodule hwio.I2CModule
+	i2cDevice hwio.I2CDevice
+}
+
+// Activity is a Activity implementation
+type grovePiDRActivity struct {
+	sync.Mutex
+	metadata *activity.Metadata
+}
+
+// NewActivity creates a new Activity
+func NewActivity(metadata *activity.Metadata) activity.Activity {
+	return &grovePiDRActivity{metadata: metadata}
+}
+
 // Metadata implements activity.Activity.Metadata
 func (a *grovePiDRActivity) Metadata() *activity.Metadata {
 	return a.metadata
 }
-
 
 
 // Eval → the final output
@@ -37,19 +66,15 @@ func (a *grovePiDRActivity) Eval(context activity.Context) (done bool, err error
 	var g *GrovePi
 	g = InitGrovePi(0x04)
 	// added ":" to define result
-	
-	result, err := g.DigitalRead(pin)
-
+	//result, 
+	result,err := g.DigitalRead(pin,"input") 
+//g.DigitalRead(pin)
 	if err != nil {
 		log.Error("GrovePi :: DigitalRead issue ", err)
 	}
-	
-	if result {
-	context.SetOutput(ovResult, true)
-	} else {
-	context.SetOutput(ovResult, false)
-	}
 
+	
+	context.SetOutput(ovResult, result)
 
 // return true → return it as the job is “done” 
 
@@ -80,51 +105,60 @@ func (grovePi GrovePi) CloseDevice() {
 	grovePi.i2cmodule.Disable()
 }
 
+//func (grovePi GrovePi) DigitalRead(pin byte) (byte, error) {
+//	b := []byte{DIGITAL_READ, pin, 0, 0}
+//	result, err := grovePi.PinMode(b, "input")
+//	if err != nil {
+//		log.Error("GrovePi :: DigitalRead Error", err)
 
-
-func (grovePi GrovePi) DigitalRead(pin byte) (bool, error) {
-	b := []bool{DIGITAL_READ, pin, 1, 0}
-	result, err := grovePi.i2cDevice.Read(1, b)
+//		return 0, err
+//	}
+	
+	
+//	time.Sleep(100 * time.Millisecond)
+	
+//	return result, nil
+//}
+// val --> value
+func (grovePi *GrovePi) DigitalRead(pin byte, mode string) (bool,error) {
+	// b := []byte{DIGITAL_READ, pin, 1, 0}
+	rawdata, err := grovePi.PinMode(pin, mode)
 	if err != nil {
-		log.Error("GrovePi :: DigitalRead Error", err)
-
 		return false, err
 	}
-	
-	
-	time.Sleep(100 * time.Millisecond)
+	data := rawdata[1:5]
 
-	return result, nil
+	dataInt := int32(data[0]) | int32(data[1])<<8 | int32(data[2])<<16 | int32(data[3])<<24
+	d := (*(*int32)(unsafe.Pointer(&dataInt)))
+	boolResult := !(d == 0) // come back to this later
+	time.Sleep(100 * time.Millisecond)
+	return boolResult,nil
 }
 
 
-
-func (grovePi GrovePi) PinMode(pin byte, mode string) (bool, error) {
-
-
-	var b []bool
-
+func (grovePi GrovePi) PinMode(pin byte, mode string) ([]byte, error) {
+	var b []byte
 	if mode == "input" {
-		b = []byte{PIN_MODE, pin, 1, 0}
-	} else {
 		b = []byte{PIN_MODE, pin, 0, 0}
+	} else {
+		b = []byte{PIN_MODE, pin, 1, 0}
 	}
-
-
-	result, err := grovePi.i2cDevice.Read(1, b)
-
-
+	err := grovePi.i2cDevice.Write(1, b)
 	if err != nil {
 		log.Error("GrovePi :: i2cDevice.Read Error", err)
-
-		return false, err
+		return nil, err
 	}
-
-
 	time.Sleep(100 * time.Millisecond)
-
+	grovePi.i2cDevice.ReadByte(1)
+	time.Sleep(100 * time.Millisecond)
+	result, err := grovePi.i2cDevice.Read(1, 9)
+	if err != nil {
+		return nil,err
+	}
+	
+	// if result {
+	//return nil
+	//}
 
 	return result, nil
-
-
 }
