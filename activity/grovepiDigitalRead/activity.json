@@ -1,7 +1,7 @@
 {
   "name": "grovepiDigitalRead",
   "type": "flogo:activity",
-  "ref": "https://github.com/banananajun/GrovePiProject/activity/grovepiDigitalRead",
+  "ref": "github.com/banananajun/GrovePiProject/activity/grovepiDigitalRead",
   "version": "0.0.1",
   "title": "grovepi Digital Read",
   "description": "Digital Read Activity for GrovePi",
