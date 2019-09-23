@@ -73,7 +73,7 @@ func (a *grovePiDRActivity) Eval(context activity.Context) (done bool, err error
 		log.Error("GrovePi :: DigitalRead issue ", err)
 	}
 
-	
+
 	context.SetOutput(ovResult, result)
 
 // return true → return it as the job is “done” 
@@ -130,9 +130,9 @@ func (grovePi *GrovePi) DigitalRead(pin byte, mode string) (bool,error) {
 
 	dataInt := int32(data[0]) | int32(data[1])<<8 | int32(data[2])<<16 | int32(data[3])<<24
 	d := (*(*int32)(unsafe.Pointer(&dataInt)))
-	boolResult := !(d == 0) // come back to this later
+	boolResult := !(d == 0) || !(d!=0)
 	time.Sleep(100 * time.Millisecond)
-	return boolResult,nil
+	return boolResult, nil
 }
 
 
@@ -145,7 +145,7 @@ func (grovePi GrovePi) PinMode(pin byte, mode string) ([]byte, error) {
 	}
 	err := grovePi.i2cDevice.Write(1, b)
 	if err != nil {
-		log.Error("GrovePi :: i2cDevice.Read Error", err)
+		log.Error("GrovePi :: i2cDevice.Write Error", err)
 		return nil, err
 	}
 	time.Sleep(100 * time.Millisecond)
