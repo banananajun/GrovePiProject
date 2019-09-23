@@ -130,7 +130,7 @@ func (grovePi *GrovePi) DigitalRead(pin byte, mode string) (bool,error) {
 
 	dataInt := int32(data[0]) | int32(data[1])<<8 | int32(data[2])<<16 | int32(data[3])<<24
 	d := (*(*int32)(unsafe.Pointer(&dataInt)))
-	boolResult := !(d == 0)
+	boolResult := !(d != 0) // come back to this later
 	time.Sleep(100 * time.Millisecond)
 	return boolResult, nil
 }
