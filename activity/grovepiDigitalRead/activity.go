@@ -4,7 +4,6 @@ import (
 	"sync"
 	"time"
 
-	"unsafe"
 	"github.com/TIBCOSoftware/flogo-lib/core/activity"
 	"github.com/TIBCOSoftware/flogo-lib/logger"
 	"github.com/mrmorphic/hwio"
@@ -135,7 +134,7 @@ func (grovePi *GrovePi) DigitalRead(pin byte, mode string) (byte,error) {
 }
 
 
-func (grovePi GrovePi) PinMode(pin byte, mode string) ([]byte, error) {
+func (grovePi GrovePi) PinMode(pin byte, mode string) error {
 	var b []byte
 	if mode == "output" {
 		b = []byte{PIN_MODE, pin, 1, 0}
