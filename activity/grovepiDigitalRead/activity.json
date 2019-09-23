@@ -16,7 +16,7 @@
   "outputs": [
     {
       "name": "result",
-      "type": "boolean"
+      "type": "string"
     }
   ]
 }
