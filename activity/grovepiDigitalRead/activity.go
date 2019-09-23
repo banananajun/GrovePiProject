@@ -145,7 +145,7 @@ func (grovePi GrovePi) PinMode(pin byte, mode string) ([]byte, error) {
 	}
 	err := grovePi.i2cDevice.Write(1, b)
 	if err != nil {
-		log.Error("GrovePi :: i2cDevice.Write Error", err)
+		log.Error("GrovePi :: i2cDevice.Read Error", err)
 		return nil, err
 	}
 	time.Sleep(100 * time.Millisecond)
