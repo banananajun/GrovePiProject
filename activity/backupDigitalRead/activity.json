@@ -1,0 +1,22 @@
+{
+  "name": "grovepiDigitalRead",
+  "type": "flogo:activity",
+  "ref": "github.com/banananajun/GrovePiProject/activity/backupDigitalRead",
+  "version": "0.0.1",
+  "title": "grovepi Digital Read",
+  "description": "Digital Read Activity for GrovePi",
+  "homepage": "https://github.com/banananajun/GrovePiProject",
+  "inputs":[
+    {
+      "name": "pin",
+      "type": "integer",
+      "required": true
+    }
+  ],
+  "outputs": [
+    {
+      "name": "result",
+      "type": "boolean"
+    }
+  ]
+}
