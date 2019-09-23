@@ -19,7 +19,7 @@ const (
 
 	ivPin     = "pin" 
 	ovResult = "result"
-	ovNumber = "number"
+	
 	
 	//Cmd format
 	DIGITAL_READ = 1
@@ -67,13 +67,13 @@ func (a *grovePiDRActivity) Eval(context activity.Context) (done bool, err error
 	g = InitGrovePi(0x04)
 	// added ":" to define result
 	//result, 
-	result,number,err := g.DigitalRead(pin,"input") 
+	result,err := g.DigitalRead(pin,"input") 
 //g.DigitalRead(pin)
 	if err != nil {
 		log.Error("GrovePi :: DigitalRead issue ", err)
 	}
 
-	context.SetOutput(ovNumber, number)
+	
 	context.SetOutput(ovResult, result)
 
 // return true → return it as the job is “done” 
@@ -120,7 +120,7 @@ func (grovePi GrovePi) CloseDevice() {
 //	return result, nil
 //}
 // val --> value
-func (grovePi *GrovePi) DigitalRead(pin byte, mode string) (bool,int,error) {
+func (grovePi *GrovePi) DigitalRead(pin byte, mode string) (bool,error) {
 	// b := []byte{DIGITAL_READ, pin, 1, 0}
 	rawdata, err := grovePi.PinMode(pin, mode)
 	if err != nil {
@@ -130,9 +130,9 @@ func (grovePi *GrovePi) DigitalRead(pin byte, mode string) (bool,int,error) {
 
 	dataInt := int32(data[0]) | int32(data[1])<<8 | int32(data[2])<<16 | int32(data[3])<<24
 	d := (*(*int32)(unsafe.Pointer(&dataInt)))
-	boolResult := !(d != 0) // come back to this later
+	boolResult := !(d == 0) // come back to this later
 	time.Sleep(100 * time.Millisecond)
-	return boolResult,d, nil
+	return boolResult,nil
 }
 
 
