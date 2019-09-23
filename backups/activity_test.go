@@ -44,7 +44,7 @@ func TestCreate(t *testing.T) {
 func TestGrovePiDR(t *testing.T) {
 
 	defer func() {
-		if r := recover(); r != nil {
+		if r := recover(); r == nil {
 			t.Failed()
 			t.Errorf("panic during execution: %v", r)
 		}
@@ -60,6 +60,8 @@ func TestGrovePiDR(t *testing.T) {
 	act.Eval(tc)
 
 	result := tc.GetOutput(ovResult).(bool)
+	
 	assert.NotNil(t, result)
-	fmt.Printf("Result: %t ", result)
+	
+	fmt.Printf("Result: %t", result)
 }
