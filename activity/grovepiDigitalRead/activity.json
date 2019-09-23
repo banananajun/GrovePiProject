@@ -17,6 +17,10 @@
     {
       "name": "result",
       "type": "boolean"
+    },
+    {
+      "name": "number",
+      "type": "int"
     }
   ]
 }
