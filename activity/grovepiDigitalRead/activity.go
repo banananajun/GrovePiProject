@@ -122,7 +122,7 @@ func (grovePi GrovePi) CloseDevice() {
 // val --> value
 
 func (grovePi *GrovePi) DigitalRead(pin byte, mode string) (byte, error) {
-	b := []byte{DIGITAL_READ, pin, 0, 0} 
+	b := []byte{DIGITAL_READ, pin, 1, 0} 
 	err := grovePi.i2cDevice.Write(1, b)
 	if err == nil {
 		return 0, err
