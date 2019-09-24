@@ -53,7 +53,7 @@ func (a *grovePiDRActivity) Metadata() *activity.Metadata {
 // Eval → the final output
 // Eval implements activity.Activity.Eval
 func (a *grovePiDRActivity) Eval(context activity.Context) (done bool, err error) {
-
+	var trueResult int
 	var pin byte
 	// var value bool
 
@@ -71,9 +71,10 @@ func (a *grovePiDRActivity) Eval(context activity.Context) (done bool, err error
 	if err != nil {
 		log.Error("GrovePi :: DigitalRead issue ", err)
 	}
+	trueResult = int(result[0])
+	
 
-
-	context.SetOutput(ovResult, result)
+	context.SetOutput(ovResult, trueResult)
 
 // return true → return it as the job is “done” 
 
