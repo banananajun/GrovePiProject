@@ -55,7 +55,7 @@ func (a *grovePiDRActivity) Metadata() *activity.Metadata {
 func (a *grovePiDRActivity) Eval(context activity.Context) (done bool, err error) {
 
 	var pin byte
-	// var value bool
+	var value bool
 
 	log.Debug("Starting Pin Read")
 	if context.GetInput(ivPin) != nil {
@@ -66,11 +66,18 @@ func (a *grovePiDRActivity) Eval(context activity.Context) (done bool, err error
 	g = InitGrovePi(0x04)
 	// added ":" to define result
 	//result, 
-	result,err := g.DigitalRead(pin,"input") 
+	result,err := g.PinMode(pin,"input") 
 //g.DigitalRead(pin)
 	if err != nil {
 		log.Error("GrovePi :: DigitalRead issue ", err)
 	}
+
+//read from grovepi
+if value {
+g.DigitalRead(pin, 1)
+} else {
+g.DigitalRead(pin, 0)
+}
 
 
 	context.SetOutput(ovResult, result)
@@ -119,7 +126,7 @@ func (grovePi GrovePi) CloseDevice() {
 //	return result, nil
 //}
 // val --> value
-func (grovePi *GrovePi) DigitalRead(pin byte, mode string) (byte,error) {
+func (grovePi *GrovePi) DigitalRead(pin byte, mode int) (byte,error) {
 	b := []byte{DIGITAL_READ, pin, 0, 0}
 	err := grovePi.i2cDevice.Write(1, b)
 	if err != nil {
@@ -134,7 +141,7 @@ func (grovePi *GrovePi) DigitalRead(pin byte, mode string) (byte,error) {
 }
 
 
-func (grovePi GrovePi) PinMode(pin byte, mode string) error {
+func (grovePi *GrovePi) PinMode(pin byte, mode string) (byte, error) {
 	var b []byte
 	if mode == "output" {
 		b = []byte{PIN_MODE, pin, 1, 0}
@@ -144,7 +151,7 @@ func (grovePi GrovePi) PinMode(pin byte, mode string) error {
 	err := grovePi.i2cDevice.Write(1, b)
 	time.Sleep(100 * time.Millisecond)
 	if err != nil {
-		return err
+		return 0, err
 	}
-	return nil
+	return 0, nil
 }
