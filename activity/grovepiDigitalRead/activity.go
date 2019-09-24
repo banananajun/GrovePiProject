@@ -71,7 +71,7 @@ func (a *grovePiDRActivity) Eval(context activity.Context) (done bool, err error
 	if err != nil {
 		log.Error("GrovePi :: DigitalRead issue ", err)
 	}
-	trueResult = int(result[0])
+	trueResult = int(result)
 	
 
 	context.SetOutput(ovResult, trueResult)
