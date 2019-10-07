@@ -135,17 +135,4 @@ func (grovePi *GrovePi) DigitalRead(pin byte, mode string) (byte,error) {
 }
 
 
-func (grovePi GrovePi) PinMode(pin byte, mode string) error {
-	var b []byte
-	if mode == "output" {
-		b = []byte{PIN_MODE, pin, 1, 0}
-	} else {
-		b = []byte{PIN_MODE, pin, 0, 0}
-	}
-	err := grovePi.i2cDevice.Write(1, b)
-	time.Sleep(100 * time.Millisecond)
-	if err != nil {
-		return err
-	}
-	return nil
-}
+
