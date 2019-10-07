@@ -65,19 +65,16 @@ func (a *grovePiDRActivity) Eval(context activity.Context) (done bool, err error
 	var g *GrovePi
 	g = InitGrovePi(0x04)
 	// added ":" to define result
-	//result, 
 	result,err := g.DigitalRead(pin,"input") 
-//g.DigitalRead(pin)
 	if err != nil {
 		log.Error("GrovePi :: DigitalRead issue ", err)
 	}
+	 // this changes the result from byte to int
 	trueResult = int(result)
 	
-
+	
 	context.SetOutput(ovResult, trueResult)
-
 // return true → return it as the job is “done” 
-
 	return true, nil
 }
 
@@ -105,20 +102,7 @@ func (grovePi GrovePi) CloseDevice() {
 	grovePi.i2cmodule.Disable()
 }
 
-//func (grovePi GrovePi) DigitalRead(pin byte) (byte, error) {
-//	b := []byte{DIGITAL_READ, pin, 0, 0}
-//	result, err := grovePi.PinMode(b, "input")
-//	if err != nil {
-//		log.Error("GrovePi :: DigitalRead Error", err)
 
-//		return 0, err
-//	}
-	
-	
-//	time.Sleep(100 * time.Millisecond)
-	
-//	return result, nil
-//}
 // val --> value
 func (grovePi *GrovePi) DigitalRead(pin byte, mode string) (byte,error) {
 	b := []byte{DIGITAL_READ, pin, 0, 0}
@@ -133,6 +117,3 @@ func (grovePi *GrovePi) DigitalRead(pin byte, mode string) (byte,error) {
 	}
 	return val, nil
 }
-
-
-
